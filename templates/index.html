@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Accueil - Atelier Tailleur Kidira{% endblock %}
+
+{% block content %}
+<div class="text-center p-5 bg-light rounded-3">
+  <h1 class="display-4">Bienvenue à l’Atelier Diallo Couture</h1>
+  <p class="lead">L’élégance cousue sur-mesure à Kidira</p>
+  <a href="{{ url_for('galerie') }}" class="btn btn-primary btn-lg mt-3">Voir la galerie</a>
+</div>
+{% endblock %}

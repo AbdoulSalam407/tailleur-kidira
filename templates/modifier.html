@@ -1,0 +1,11 @@
+<h2>Modifier</h2>
+<form method="post">
+    <label>Titre :</label><br>
+    <input type="text" name="titre" value="{{ realisation['titre'] }}" required><br><br>
+
+    <label>Description :</label><br>
+    <textarea name="description" required>{{ realisation['description'] }}</textarea><br><br>
+
+    <button type="submit">Mettre à jour</button>
+</form>
+<a href="/galerie">Retour</a>

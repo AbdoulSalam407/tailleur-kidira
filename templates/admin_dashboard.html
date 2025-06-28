@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableau de bord Admin{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">🧰 Tableau de bord de {{ username }}</h2>
+
+<ul class="list-group">
+  <li class="list-group-item"><a href="{{ url_for('galerie') }}">🖼️ Gérer les réalisations</a></li>
+  <li class="list-group-item"><a href="{{ url_for('admin_messages') }}">📬 Voir les messages</a></li>
+  <li class="list-group-item"><a href="{{ url_for('admin_temoignages') }}">❤️ Voir les témoignages</a></li>
+</ul>
+
+<a href="{{ url_for('admin_logout') }}" class="btn btn-danger mt-4">🔓 Se déconnecter</a>
+{% endblock %}

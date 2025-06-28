@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestion des témoignages{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">🛠 Gestion des témoignages</h2>
+
+<a href="{{ url_for('ajouter_temoignage') }}" class="btn btn-success mb-3">➕ Ajouter un témoignage</a>
+
+<table class="table table-bordered table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Message</th>
+      <th>Photo</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in temoignages %}
+      <tr>
+        <td>{{ t['id'] }}</td>
+        <td>{{ t['nom'] }}</td>
+        <td>{{ t['message'] }}</td>
+        <td>
+          {% if t['photo_url'] %}
+            <img src="{{ url_for('static', filename='images/' + t['photo_url']) }}" alt="photo" width="60">
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ url_for('modifier_temoignage', id=t['id']) }}" class="btn btn-warning btn-sm">✏️ Modifier</a>
+          <a href="{{ url_for('supprimer_temoignage', id=t['id']) }}" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer ce témoignage ?')">🗑 Supprimer</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary mt-3">🏠 Retour au tableau de bord</a>
+{% endblock %}

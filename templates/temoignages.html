@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Témoignages - Atelier Diallo Couture{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">❤️ Témoignages de nos clients</h2>
+<div class="text-center mb-4">
+  <a href="{{ url_for('ajouter_temoignage') }}" class="btn btn-primary">📝 Laisser un témoignage</a>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for t in temoignages %}
+    <div class="col">
+      <div class="card h-100 shadow-sm text-center">
+        {% if t['photo_url'] %}
+          <img src="{{ url_for('static', filename='images/' + t['photo_url']) }}" class="card-img-top" alt="Photo de {{ t['nom'] }}" style="height: 200px; object-fit: cover;">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ t['nom'] }}</h5>
+          <p class="card-text">"{{ t['message'] }}"</p>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <p class="text-muted text-center">Aucun témoignage pour le moment.</p>
+  {% endfor %}
+</div>
+{% endblock %}
