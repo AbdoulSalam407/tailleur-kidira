@@ -15,10 +15,6 @@
         </div>
         <div class="card-footer d-flex justify-content-between">
           <a href="https://wa.me/221781209169?text=Je%20suis%20intéressé%20par%20{{ r['titre'] }}" class="btn btn-success btn-sm" target="_blank">Commander</a>
-          <div>
-            <a href="{{ url_for('modifier', id=r['id']) }}" class="btn btn-warning btn-sm">Modifier</a>
-            <a href="{{ url_for('supprimer', id=r['id']) }}" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer cette réalisation ?')">Supprimer</a>
-          </div>
         </div>
       </div>
     </div>
@@ -26,5 +22,4 @@
     <p class="text-muted">Aucune réalisation ajoutée pour le moment.</p>
   {% endfor %}
 </div>
-<a href="{{ url_for('ajouter') }}" class="btn btn-primary mt-4">➕ Ajouter une réalisation</a>
 {% endblock %}
