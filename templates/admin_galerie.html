@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Galerie - Atelier Diallo Couture{% endblock %}
+
+{% block content %}
+<h2 class="mb-4 text-center">Nos Réalisations</h2>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+  {% for r in realisations %}
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <img src="{{ url_for('static', filename='images/' + r['image_url']) }}" class="card-img-top" alt="{{ r['titre'] }}">
+         <div class="card-body">
+            <h5 class="card-title">{{ r['titre'] }}</h5>
+            <p class="card-text">{{ r['description'] }}</p>
+            <p class="card-text fw-bold text-success">{{ r['prix'] }} FCFA</p>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+          <a href="https://wa.me/221781209169?text=Je%20suis%20intéressé%20par%20{{ r['titre'] }}" class="btn btn-success btn-sm" target="_blank">Commander</a>
+          <div>
+            <a href="{{ url_for('modifier', id=r['id']) }}" class="btn btn-warning btn-sm">Modifier</a>
+            <a href="{{ url_for('supprimer', id=r['id']) }}" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer cette réalisation ?')">Supprimer</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <p class="text-muted">Aucune réalisation ajoutée pour le moment.</p>
+  {% endfor %}
+</div>
+<a href="{{ url_for('ajouter') }}" class="btn btn-primary mt-4">➕ Ajouter une réalisation</a>
+{% endblock %}

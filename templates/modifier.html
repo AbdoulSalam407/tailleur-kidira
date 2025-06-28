@@ -6,6 +6,9 @@
     <label>Description :</label><br>
     <textarea name="description" required>{{ realisation['description'] }}</textarea><br><br>
 
+    <label for="prix" class="form-label">Prix (FCFA)</label>
+    <input type="number" class="form-control" id="prix" name="prix" value="{{ realisation['prix'] }}" required>
+
     <button type="submit">Mettre à jour</button>
 </form>
-<a href="/galerie">Retour</a>
+<a href="/admin_galerie">Retour</a>

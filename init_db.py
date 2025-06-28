@@ -7,15 +7,21 @@ def hash_password(password):
 conn = sqlite3.connect('tailleur.db')
 cursor = conn.cursor()
 
-# Table réalisations
+# Supprimer si tu veux repartir de zéro
+cursor.execute("DROP TABLE IF EXISTS realisations")
+
+# Créer la table avec prix
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS realisations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     titre TEXT NOT NULL,
     image_url TEXT NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    prix REAL NOT NULL
 )
 ''')
+
+
 
 # Table messages contact
 cursor.execute('''

@@ -37,12 +37,20 @@ def galerie():
     conn.close()
     return render_template('galerie.html', realisations=realisations)
 
+@app.route('/admin_galerie')
+def admin_galerie():
+    conn = get_db_connection()
+    realisations = conn.execute("SELECT * FROM realisations").fetchall()
+    conn.close()
+    return render_template('admin_galerie.html', realisations=realisations)
+
 # --- Ajouter une réalisation avec image uploadée ---
 @app.route('/ajouter', methods=['GET', 'POST'])
 def ajouter():
     if request.method == 'POST':
         titre = request.form['titre']
         description = request.form['description']
+        prix = request.form['prix']
         file = request.files['image']
 
         if file and allowed_file(file.filename):
@@ -51,32 +59,33 @@ def ajouter():
             file.save(filepath)
 
             conn = get_db_connection()
-            conn.execute("INSERT INTO realisations (titre, image_url, description) VALUES (?, ?, ?)",
-                         (titre, filename, description))
+            conn.execute("INSERT INTO realisations (titre, image_url, description, prix) VALUES (?, ?, ?, ?)",
+                         (titre, filename, description, prix))
             conn.commit()
             conn.close()
-            return redirect(url_for('galerie'))
+            return redirect(url_for('admin_galerie'))
         else:
             return "Erreur : Veuillez choisir une image au format .jpg, .jpeg, .png ou .gif"
     return render_template('ajouter.html')
 
-# --- Modifier une réalisation (sans changer l'image pour l'instant) ---
 @app.route('/modifier/<int:id>', methods=['GET', 'POST'])
 def modifier(id):
     conn = get_db_connection()
     realisation = conn.execute("SELECT * FROM realisations WHERE id = ?", (id,)).fetchone()
+
     if request.method == 'POST':
         titre = request.form['titre']
         description = request.form['description']
-        conn.execute("UPDATE realisations SET titre = ?, description = ? WHERE id = ?",
-                     (titre, description, id))
+        prix = request.form['prix']
+        conn.execute("UPDATE realisations SET titre = ?, description = ?, prix = ? WHERE id = ?",
+                     (titre, description, prix, id))
         conn.commit()
         conn.close()
-        return redirect(url_for('galerie'))
+        return redirect(url_for('admin_galerie'))
+    
     conn.close()
     return render_template('modifier.html', realisation=realisation)
 
-# --- Supprimer une réalisation ---
 @app.route('/supprimer/<int:id>')
 def supprimer(id):
     conn = get_db_connection()
@@ -88,10 +97,12 @@ def supprimer(id):
         if os.path.exists(image_path):
             os.remove(image_path)
 
+    # Supprimer la ligne de la base (prix est supprimé avec la ligne)
     conn.execute("DELETE FROM realisations WHERE id = ?", (id,))
     conn.commit()
     conn.close()
-    return redirect(url_for('galerie'))
+    return redirect(url_for('admin_galerie'))
+
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
