@@ -3,24 +3,30 @@
 {% block title %}Galerie - Atelier Diallo Couture{% endblock %}
 
 {% block content %}
-<h2 class="mb-4 text-center">Nos Réalisations</h2>
+<h2 class="mb-4 text-center fw-bold" style="color:#3b82f6; text-shadow:0 2px 12px #e0e7ff;">
+  Nos Réalisations
+</h2>
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
   {% for r in realisations %}
     <div class="col">
-      <div class="card h-100 shadow-sm">
-        <img src="{{ url_for('static', filename='images/' + r['image_url']) }}" class="card-img-top" alt="{{ r['titre'] }}">
+      <div class="card h-100 shadow-sm border-0" style="border-radius:18px; transition:transform 0.2s, box-shadow 0.2s;">
+        <img src="{{ url_for('static', filename='images/' + r['image_url']) }}" class="card-img-top" alt="{{ r['titre'] }}" style="height:220px; object-fit:cover; border-radius:18px 18px 0 0;">
         <div class="card-body">
-            <h5 class="card-title">{{ r['titre'] }}</h5>
-            <p class="card-text">{{ r['description'] }}</p>
-            <p class="card-text fw-bold text-success">{{ r['prix'] }} FCFA</p>
+            <h5 class="card-title fw-bold" style="color:#374151;">{{ r['titre'] }}</h5>
+            <p class="card-text" style="color:#6b7280; font-size:1rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; min-height:2.4em;">
+              {{ r['description'] }}
+            </p>
+            <span class="badge bg-success fs-6 px-3 py-2 mb-2">{{ r['prix'] }} FCFA</span>
         </div>
-        <div class="card-footer d-flex justify-content-between">
-          <a href="https://wa.me/221781209169?text=Je%20suis%20intéressé%20par%20{{ r['titre'] }}" class="btn btn-success btn-sm" target="_blank">Commander</a>
+        <div class="card-footer bg-white border-0 d-flex justify-content-center" style="border-radius:0 0 18px 18px;">
+          <a href="https://wa.me/221781209169?text=Je%20suis%20intéressé%20par%20{{ r['titre'] }}" class="btn btn-success btn-lg px-4 py-2 shadow-sm" target="_blank" style="font-weight:600;">
+            <i class="bi bi-whatsapp"></i> Commander
+          </a>
         </div>
       </div>
     </div>
   {% else %}
-    <p class="text-muted">Aucune réalisation ajoutée pour le moment.</p>
+    <p class="text-muted text-center">Aucune réalisation ajoutée pour le moment.</p>
   {% endfor %}
 </div>
 {% endblock %}

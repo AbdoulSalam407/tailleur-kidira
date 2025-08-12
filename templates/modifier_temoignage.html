@@ -3,26 +3,32 @@
 {% block title %}Modifier un témoignage{% endblock %}
 
 {% block content %}
-<h2 class="text-center mb-4">✏️ Modifier le témoignage de {{ temoignage['nom'] }}</h2>
+<h2 class="text-center mb-4 fw-bold" style="color:#3b82f6;">
+  <i class="bi bi-pencil-square"></i> Modifier le témoignage de {{ temoignage['nom'] }}
+</h2>
 
-<form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
+<form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm border-0 mx-auto" style="max-width:500px; border-radius:18px;">
   <div class="mb-3">
-    <label for="nom" class="form-label">Nom</label>
-    <input type="text" name="nom" class="form-control" value="{{ temoignage['nom'] }}" required>
+    <label for="nom" class="form-label fw-semibold">Nom</label>
+    <input type="text" name="nom" class="form-control rounded-3" value="{{ temoignage['nom'] }}" required>
   </div>
   <div class="mb-3">
-    <label for="message" class="form-label">Message</label>
-    <textarea name="message" class="form-control" rows="4" required>{{ temoignage['message'] }}</textarea>
+    <label for="message" class="form-label fw-semibold">Message</label>
+    <textarea name="message" class="form-control rounded-3" rows="4" required>{{ temoignage['message'] }}</textarea>
   </div>
   <div class="mb-3">
-    <label for="photo" class="form-label">Photo (laisser vide pour ne pas changer)</label>
-    <input type="file" name="photo" class="form-control">
+    <label for="photo" class="form-label fw-semibold">Photo (laisser vide pour ne pas changer)</label>
+    <input type="file" name="photo" class="form-control rounded-3">
     {% if temoignage['photo_url'] %}
-      <img src="{{ url_for('static', filename='images/' + temoignage['photo_url']) }}" alt="photo" width="80" class="mt-2">
+      <img src="{{ url_for('static', filename='images/' + temoignage['photo_url']) }}" alt="photo" width="80" class="mt-2 rounded-circle border shadow-sm">
     {% endif %}
   </div>
-  <button type="submit" class="btn btn-primary">💾 Enregistrer</button>
+  <button type="submit" class="btn btn-primary btn-lg px-4 py-2 shadow-sm w-100" style="font-weight:600;">
+    <i class="bi bi-save"></i> Enregistrer
+  </button>
 </form>
 
-<a href="{{ url_for('admin_temoignages') }}" class="btn btn-secondary mt-4">⬅ Retour</a>
+<a href="{{ url_for('admin_temoignages') }}" class="btn btn-link mt-4 text-decoration-none">
+  <i class="bi bi-arrow-left"></i> Retour
+</a>
 {% endblock %}

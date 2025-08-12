@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Merci</title>
+    <title>{% block title %}Merci pour votre message !{% endblock %}</title>
 </head>
 <body>
-    <h2>Merci {{ nom }} pour votre message !</h2>
-    <a href="/">Retour à l'accueil</a>
+    {% block content %}
+    <div class="card mx-auto mt-5 p-5 shadow-sm border-0 text-center" style="max-width:500px; border-radius:18px;">
+        <h2 class="fw-bold mb-3" style="color:#22c55e;">
+            <i class="bi bi-check-circle-fill"></i> Merci {{ nom }} !
+        </h2>
+        <p class="lead mb-4" style="color:#374151;">
+            Votre message a bien été envoyé.<br>
+            Nous vous répondrons dans les plus brefs délais.
+        </p>
+        <a href="{{ url_for('accueil') }}" class="btn btn-primary btn-lg px-4 py-2 shadow-sm">
+            <i class="bi bi-house-door"></i> Retour à l'accueil
+        </a>
+    </div>
+    {% endblock %}
 </body>
 </html>

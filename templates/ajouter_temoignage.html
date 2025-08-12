@@ -3,27 +3,35 @@
 {% block title %}Ajouter un témoignage{% endblock %}
 
 {% block content %}
-<h2 class="text-center mb-4">📝 Laisser un témoignage</h2>
+<h2 class="text-center mb-4 fw-bold" style="color:#3b82f6;">
+  <i class="bi bi-chat-left-quote"></i> Laisser un témoignage
+</h2>
 
 {% if success %}
-  <div class="alert alert-success">Merci pour votre témoignage !</div>
+  <div class="alert alert-success shadow-sm rounded-3 text-center fw-semibold">
+    <i class="bi bi-check-circle-fill"></i> Merci pour votre témoignage !
+  </div>
 {% endif %}
 
-<form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
+<form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm border-0 mx-auto" style="max-width:500px; border-radius:18px;">
   <div class="mb-3">
-    <label for="nom" class="form-label">Nom</label>
-    <input type="text" class="form-control" id="nom" name="nom" required>
+    <label for="nom" class="form-label fw-semibold">Nom</label>
+    <input type="text" class="form-control rounded-3" id="nom" name="nom" required>
   </div>
   <div class="mb-3">
-    <label for="message" class="form-label">Message</label>
-    <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+    <label for="message" class="form-label fw-semibold">Message</label>
+    <textarea class="form-control rounded-3" id="message" name="message" rows="4" required></textarea>
   </div>
   <div class="mb-3">
-    <label for="photo" class="form-label">Photo (facultatif)</label>
-    <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+    <label for="photo" class="form-label fw-semibold">Photo (facultatif)</label>
+    <input type="file" class="form-control rounded-3" id="photo" name="photo" accept="image/*">
   </div>
-  <button type="submit" class="btn btn-primary">Envoyer le témoignage</button>
+  <button type="submit" class="btn btn-primary btn-lg px-4 py-2 shadow-sm w-100" style="font-weight:600;">
+    <i class="bi bi-send"></i> Envoyer le témoignage
+  </button>
 </form>
 
-<a href="{{ url_for('temoignages') }}" class="btn btn-secondary mt-4">⬅ Voir les témoignages</a>
+<a href="{{ url_for('temoignages') }}" class="btn btn-link mt-4 text-decoration-none">
+  <i class="bi bi-arrow-left"></i> Voir les témoignages
+</a>
 {% endblock %}

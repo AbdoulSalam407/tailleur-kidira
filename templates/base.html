@@ -15,32 +15,53 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_galerie.css') }}" />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', 'Montserrat', Arial, sans-serif;
       background-color: #f8f9fa;
     }
     .navbar {
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+      background: linear-gradient(90deg, #343a40 60%, #3b82f6 100%);
+    }
+    .navbar-brand, .nav-link {
+      transition: color 0.2s;
+    }
+    .nav-link:hover, .navbar-brand:hover {
+      color: #22c55e !important;
     }
     .footer-link {
       text-decoration: none;
       color: #ccc;
+      transition: color 0.2s;
     }
     .footer-link:hover {
       text-decoration: underline;
-      color: white;
+      color: #22c55e;
     }
     footer {
       background: linear-gradient(45deg, #343a40, #212529);
+      box-shadow: 0 -2px 12px rgba(59,130,246,0.08);
+    }
+    footer .bi {
+      font-size: 1.3rem;
+      transition: color 0.2s;
+    }
+    footer .bi:hover {
+      color: #22c55e;
+    }
+    @media (max-width: 600px) {
+      .navbar-brand { font-size: 1.1rem; }
+      .footer-link, footer .bi { font-size: 1rem; }
+      main.container { padding: 1rem !important; }
     }
   </style>
 </head>
 <body>
 
 <!-- ===== NAVIGATION ===== -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
   <div class="container">
     <a class="navbar-brand fw-bold" href="{{ url_for('accueil') }}">
-      <i class="bi bi-scissors"></i> Diallo Couture
+      <i class="bi bi-scissors"></i> Ba Couture
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -65,11 +86,11 @@
 <!-- ===== PIED DE PAGE ===== -->
 <footer class="text-white mt-5 py-4">
   <div class="container text-center">
-    <p class="mb-1">&copy; {{ current_year }} | <strong>Atelier Diallo Couture</strong> - Kidira</p>
+    <p class="mb-1">&copy; {{ current_year }} | <strong>Atelier Ba Couture</strong> - Kidira</p>
     <p class="mb-2">
       <i class="bi bi-geo-alt-fill"></i> Commune de Kidira |
-      <i class="bi bi-telephone-fill"></i> +221 77 123 45 67 |
-      <i class="bi bi-envelope-fill"></i> contact@tailleur-kidira.com
+      <i class="bi bi-telephone-fill"></i> +221 78 405 55 91 |
+      <i class="bi bi-envelope-fill"></i> contact@ba-couture.com
     </p>
     <div>
       <a href="{{ url_for('accueil') }}" class="footer-link me-3">Accueil</a>

@@ -3,39 +3,55 @@
 {% block title %}Gestion des témoignages{% endblock %}
 
 {% block content %}
-<h2 class="text-center mb-4">🛠 Gestion des témoignages</h2>
+<h2 class="text-center mb-4 fw-bold" style="color:#3b82f6;">
+  <i class="bi bi-tools"></i> Gestion des témoignages
+</h2>
 
-<a href="{{ url_for('ajouter_temoignage') }}" class="btn btn-success mb-3">➕ Ajouter un témoignage</a>
+<a href="{{ url_for('ajouter_temoignage') }}" class="btn btn-success mb-3 fw-semibold">
+  <i class="bi bi-plus-circle"></i> Ajouter un témoignage
+</a>
 
-<table class="table table-bordered table-striped">
-  <thead class="table-dark">
-    <tr>
-      <th>ID</th>
-      <th>Nom</th>
-      <th>Message</th>
-      <th>Photo</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for t in temoignages %}
+<div class="table-responsive">
+  <table class="table table-bordered table-striped align-middle shadow-sm rounded-3 overflow-hidden">
+    <thead class="table-dark">
       <tr>
-        <td>{{ t['id'] }}</td>
-        <td>{{ t['nom'] }}</td>
-        <td>{{ t['message'] }}</td>
-        <td>
-          {% if t['photo_url'] %}
-            <img src="{{ url_for('static', filename='images/' + t['photo_url']) }}" alt="photo" width="60">
-          {% endif %}
-        </td>
-        <td>
-          <a href="{{ url_for('modifier_temoignage', id=t['id']) }}" class="btn btn-warning btn-sm">✏️ Modifier</a>
-          <a href="{{ url_for('supprimer_temoignage', id=t['id']) }}" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer ce témoignage ?')">🗑 Supprimer</a>
-        </td>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Message</th>
+        <th>Photo</th>
+        <th>Actions</th>
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {% for t in temoignages %}
+        <tr>
+          <td class="fw-bold">{{ t['id'] }}</td>
+          <td>{{ t['nom'] }}</td>
+          <td style="max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+            {{ t['message'] }}
+          </td>
+          <td>
+            {% if t['photo_url'] %}
+              <img src="{{ url_for('static', filename='images/' + t['photo_url']) }}" alt="photo" width="60" class="rounded-circle border shadow-sm">
+            {% else %}
+              <span class="text-muted">Aucune</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{{ url_for('modifier_temoignage', id=t['id']) }}" class="btn btn-warning btn-sm me-1">
+              <i class="bi bi-pencil-square"></i> Modifier
+            </a>
+            <a href="{{ url_for('supprimer_temoignage', id=t['id']) }}" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer ce témoignage ?')">
+              <i class="bi bi-trash"></i> Supprimer
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
-<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary mt-3">🏠 Retour au tableau de bord</a>
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary mt-3 fw-semibold">
+  <i class="bi bi-house-door"></i> Retour au tableau de bord
+</a>
 {% endblock %}
