@@ -1,29 +1,30 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import hashlib
 
-
-import sqlite3
+import mysql.connector
 import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'votre_cle_secrete_a_personnaliser'  # indispensable pour les sessions
 
-# Dossier pour enregistrer les images
 UPLOAD_FOLDER = 'static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Vérifie l’extension du fichier
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Connexion à la base de données
+# Connexion à la base de données MySQL
 def get_db_connection():
-    conn = sqlite3.connect('tailleur.db')
-    conn.row_factory = sqlite3.Row
+    conn = mysql.connector.connect(
+        host='mysql-abdoul-salam-diallo.alwaysdata.net',
+        user='405601',
+        password='Asd781209169#',
+        database='abdoul-salam-diallo_tailleur_db'
+    )
     return conn
 
 @app.route('/')
@@ -33,18 +34,21 @@ def accueil():
 @app.route('/galerie')
 def galerie():
     conn = get_db_connection()
-    realisations = conn.execute("SELECT * FROM realisations").fetchall()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM realisations")
+    realisations = cursor.fetchall()
     conn.close()
     return render_template('galerie.html', realisations=realisations)
 
 @app.route('/admin_galerie')
 def admin_galerie():
     conn = get_db_connection()
-    realisations = conn.execute("SELECT * FROM realisations").fetchall()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM realisations")
+    realisations = cursor.fetchall()
     conn.close()
     return render_template('admin_galerie.html', realisations=realisations)
 
-# --- Ajouter une réalisation avec image uploadée ---
 @app.route('/ajouter', methods=['GET', 'POST'])
 def ajouter():
     if request.method == 'POST':
@@ -59,8 +63,9 @@ def ajouter():
             file.save(filepath)
 
             conn = get_db_connection()
-            conn.execute("INSERT INTO realisations (titre, image_url, description, prix) VALUES (?, ?, ?, ?)",
-                         (titre, filename, description, prix))
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO realisations (titre, image_url, description, prix) VALUES (%s, %s, %s, %s)",
+                           (titre, filename, description, prix))
             conn.commit()
             conn.close()
             return redirect(url_for('admin_galerie'))
@@ -71,14 +76,16 @@ def ajouter():
 @app.route('/modifier/<int:id>', methods=['GET', 'POST'])
 def modifier(id):
     conn = get_db_connection()
-    realisation = conn.execute("SELECT * FROM realisations WHERE id = ?", (id,)).fetchone()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM realisations WHERE id = %s", (id,))
+    realisation = cursor.fetchone()
 
     if request.method == 'POST':
         titre = request.form['titre']
         description = request.form['description']
         prix = request.form['prix']
-        conn.execute("UPDATE realisations SET titre = ?, description = ?, prix = ? WHERE id = ?",
-                     (titre, description, prix, id))
+        cursor.execute("UPDATE realisations SET titre = %s, description = %s, prix = %s WHERE id = %s",
+                       (titre, description, prix, id))
         conn.commit()
         conn.close()
         return redirect(url_for('admin_galerie'))
@@ -89,20 +96,19 @@ def modifier(id):
 @app.route('/supprimer/<int:id>')
 def supprimer(id):
     conn = get_db_connection()
-    realisation = conn.execute("SELECT * FROM realisations WHERE id = ?", (id,)).fetchone()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM realisations WHERE id = %s", (id,))
+    realisation = cursor.fetchone()
 
-    # Supprimer l'image liée
     if realisation and realisation["image_url"]:
         image_path = os.path.join(app.config['UPLOAD_FOLDER'], realisation["image_url"])
         if os.path.exists(image_path):
             os.remove(image_path)
 
-    # Supprimer la ligne de la base (prix est supprimé avec la ligne)
-    conn.execute("DELETE FROM realisations WHERE id = ?", (id,))
+    cursor.execute("DELETE FROM realisations WHERE id = %s", (id,))
     conn.commit()
     conn.close()
     return redirect(url_for('admin_galerie'))
-
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
@@ -112,19 +118,21 @@ def contact():
         message = request.form['message']
 
         conn = get_db_connection()
-        conn.execute("INSERT INTO messages (nom, email, message) VALUES (?, ?, ?)",
-                     (nom, email, message))
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO messages (nom, email, message) VALUES (%s, %s, %s)",
+                       (nom, email, message))
         conn.commit()
         conn.close()
 
         return render_template('contact.html', success=True)
     return render_template('contact.html')
 
-
 @app.route('/temoignages')
 def temoignages():
     conn = get_db_connection()
-    temoignages = conn.execute("SELECT * FROM temoignages").fetchall()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM temoignages")
+    temoignages = cursor.fetchall()
     conn.close()
     return render_template('temoignages.html', temoignages=temoignages)
 
@@ -139,8 +147,10 @@ def admin_login():
         password_hashed = hash_password(password)
 
         conn = get_db_connection()
-        admin = conn.execute("SELECT * FROM admin WHERE username = ? AND password = ?", 
-                             (username, password_hashed)).fetchone()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM admin WHERE username = %s AND password = %s", 
+                       (username, password_hashed))
+        admin = cursor.fetchone()
         conn.close()
 
         if admin:
@@ -163,18 +173,20 @@ def admin_logout():
     session.clear()
     return redirect(url_for('admin_login'))
 
-
 @app.route('/admin/messages')
 def admin_messages():
     conn = get_db_connection()
-    messages = conn.execute("SELECT * FROM messages ORDER BY id DESC").fetchall()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM messages ORDER BY id DESC")
+    messages = cursor.fetchall()
     conn.close()
     return render_template('admin_messages.html', messages=messages)
 
 @app.route('/admin/messages/supprimer/<int:id>')
 def supprimer_message(id):
     conn = get_db_connection()
-    conn.execute("DELETE FROM messages WHERE id = ?", (id,))
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM messages WHERE id = %s", (id,))
     conn.commit()
     conn.close()
     return redirect(url_for('admin_messages'))
@@ -185,7 +197,9 @@ def admin_temoignages():
         return redirect(url_for('admin_login'))
     
     conn = get_db_connection()
-    temoignages = conn.execute("SELECT * FROM temoignages ORDER BY id DESC").fetchall()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM temoignages ORDER BY id DESC")
+    temoignages = cursor.fetchall()
     conn.close()
     return render_template('admin_temoignages.html', temoignages=temoignages)
 
@@ -195,7 +209,9 @@ def modifier_temoignage(id):
         return redirect(url_for('admin_login'))
 
     conn = get_db_connection()
-    temoignage = conn.execute("SELECT * FROM temoignages WHERE id = ?", (id,)).fetchone()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM temoignages WHERE id = %s", (id,))
+    temoignage = cursor.fetchone()
 
     if request.method == 'POST':
         nom = request.form['nom']
@@ -207,8 +223,8 @@ def modifier_temoignage(id):
             photo_filename = secure_filename(photo.filename)
             photo.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_filename))
 
-        conn.execute("UPDATE temoignages SET nom = ?, message = ?, photo_url = ? WHERE id = ?",
-                     (nom, message, photo_filename, id))
+        cursor.execute("UPDATE temoignages SET nom = %s, message = %s, photo_url = %s WHERE id = %s",
+                       (nom, message, photo_filename, id))
         conn.commit()
         conn.close()
         return redirect(url_for('admin_temoignages'))
@@ -222,7 +238,8 @@ def supprimer_temoignage(id):
         return redirect(url_for('admin_login'))
 
     conn = get_db_connection()
-    conn.execute("DELETE FROM temoignages WHERE id = ?", (id,))
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM temoignages WHERE id = %s", (id,))
     conn.commit()
     conn.close()
     return redirect(url_for('admin_temoignages'))
@@ -241,17 +258,15 @@ def ajouter_temoignage():
             photo.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_filename))
 
         conn = get_db_connection()
-        conn.execute("INSERT INTO temoignages (nom, message, photo_url) VALUES (?, ?, ?)",
-                     (nom, message, photo_filename))
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO temoignages (nom, message, photo_url) VALUES (%s, %s, %s)",
+                       (nom, message, photo_filename))
         conn.commit()
         conn.close()
 
         return render_template('ajouter_temoignage.html', success=True)
     
     return render_template('ajouter_temoignage.html')
-
-
-
 
 if __name__ == '__main__':
     import os

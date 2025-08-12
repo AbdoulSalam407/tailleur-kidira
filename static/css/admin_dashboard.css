@@ -1,0 +1,90 @@
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: #3b82f6;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 8px #e0e7ff;
+}
+
+.list-group {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(59, 130, 246, 0.08);
+    background: #fff;
+}
+
+.list-group-item {
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1.2rem 1.5rem;
+    font-size: 1.1rem;
+    transition: background 0.2s;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.list-group-item a {
+    color: #374151;
+    text-decoration: none;
+    display: block;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.list-group-item:hover {
+    background: #e0e7ff;
+}
+
+.list-group-item a:hover {
+    color: #3b82f6;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 2rem auto 0 auto;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    border: none;
+    background: #ef4444;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.12);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
+    background: #dc2626;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.18);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+    }
+    .list-group, .btn {
+        max-width: 95vw;
+        font-size: 1rem;
+    }
+    .list-group-item {
+        padding: 1rem 1rem;
+        font-size: 1rem;
+    }
+}
