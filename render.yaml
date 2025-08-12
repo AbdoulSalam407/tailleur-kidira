@@ -1,10 +1,29 @@
+# services:
+#   - type: web
+#     name: tailleur-kidira
+#     runtime: python
+#     buildCommand: ""
+#     startCommand: python app.py
+#     envVars:
+#       - key: FLASK_ENV
+#         value: production
+#     autoDeploy: true
 services:
   - type: web
     name: tailleur-kidira
-    runtime: python
-    buildCommand: ""
-    startCommand: python app.py
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
     envVars:
+      - key: DB_HOST
+        value: mysql-abdoul-salam-diallo.alwaysdata.net
+      - key: DB_USER
+        value: 405601
+      - key: DB_PASSWORD
+        value: Asd781209169#
+      - key: DB_NAME
+        value: abdoul-salam-diallo_tailleur_db
       - key: FLASK_ENV
         value: production
-    autoDeploy: true
+      - key: SECRET_KEY
+        value: votre_cle_secrete_a_personnaliser
